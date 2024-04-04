@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import List
 
 from pygrocy.base import DataModel
 from pygrocy.grocy_api_client import (
@@ -19,15 +19,10 @@ from pygrocy.grocy_api_client import (
 class ProductBarcode(DataModel):
     def __init__(self, data: ProductBarcodeData):
         self._barcode = data.barcode
-        self._amount = float(data.amount) if data.amount else None
 
     @property
     def barcode(self) -> str:
         return self._barcode
-
-    @property
-    def amount(self) -> Optional[float]:
-        return self._amount
 
 
 class QuantityUnit(DataModel):
@@ -70,6 +65,7 @@ class Product(DataModel):
 
     def _init_empty(self):
         self._name = None
+        self._location_id = None
         self._id = None
         self._amount_missing = None
         self._is_partly_in_stock = None
@@ -119,6 +115,7 @@ class Product(DataModel):
         self._id = product.id
         self._product_group_id = product.product_group_id
         self._name = product.name
+        self._location_id = product.location_id
 
     def _init_from_StockLogResponse(self, response: StockLogResponse):
         self._id = response.product_id
@@ -134,6 +131,10 @@ class Product(DataModel):
     @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def location_id(self) -> str:
+        return self._location_id
 
     @property
     def id(self) -> int:
